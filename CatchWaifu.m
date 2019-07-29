@@ -22,6 +22,9 @@ Begin["`Private`"];
 (*WaifuLabs: https://waifulabs.com/*)
 
 
+$WaifuLabsIndexMax = 300000;
+
+
 WaifuLab[index_Integer] := WaifuLab[index, index, index];
 WaifuLab[new_Integer, pose_Integer, color_Integer] := Module[
 	{settings, request, girl},
@@ -36,19 +39,31 @@ WaifuLab[new_Integer, pose_Integer, color_Integer] := Module[
 	];
 	girl = Import[request, "RawJSON"]["girl"];
 	ImportString[girl, "Base64"]
-]
+];
+
+
 WaifuLabGrid[] := Module[
-	{i1, i2, i3, i4},
-	{i1, i2, i3} = RandomInteger[300000, 3];
+	{i1, i2, i3, i4, grid},
+	{i1, i2, i3} = RandomInteger[$WaifuLabsIndexMax, 3];
 	i4 = WaifuLab[i1, i2, i3];
 	Echo[{i1, i2, i3}, "Seeds: "];
-	Row[{i4, Column[WaifuLab /@ {i1, i2, i3}]}]
-]
+	grid = {
+		{i4, SpanFromLeft, SpanFromLeft, WaifuLab@i1},
+		{SpanFromAbove, SpanFromBoth, SpanFromBoth, WaifuLab@i2},
+		{SpanFromAbove, SpanFromBoth, SpanFromBoth, WaifuLab@i3}
+	};
+	GraphicsGrid[grid, Frame -> All]
+];
 WaifuLabGrid[i1_, i2_, i3_] := Module[
 	{i4 = WaifuLab[i1, i2, i3]},
 	Echo[{i1, i2, i3}, "Seeds: "];
-	Row[{i4, Column[WaifuLab /@ {i1, i2, i3}]}]
-]
+	grid = {
+		{i4, SpanFromLeft, SpanFromLeft, WaifuLab@i1},
+		{SpanFromAbove, SpanFromBoth, SpanFromBoth, WaifuLab@i2},
+		{SpanFromAbove, SpanFromBoth, SpanFromBoth, WaifuLab@i3}
+	};
+	GraphicsGrid[grid, Frame -> All]
+];
 
 
 (* ::Section:: *)

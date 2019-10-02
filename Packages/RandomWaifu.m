@@ -3,6 +3,10 @@ RandomWaifu::usage = "";
 
 Begin["`Private`"];
 
+$RandomWaifuModels = {
+	"E1", "E2", "F1", "F2"
+};
+
 Options[RandomWaifu] = {
 	MetaInformation -> True,
 	TargetDevice -> "GPU",
@@ -11,24 +15,21 @@ Options[RandomWaifu] = {
 RandomWaifu[o : OptionsPattern[]] := RandomWaifu[
 	RandomVariate[NormalDistribution[], 100], o
 ];
-RandomWaifu[n_Integer, o : OptionsPattern[]] := Module[
-	{data},
+RandomWaifu[n_Integer, o : OptionsPattern[]] := Block[
+	{data, dist},
 	If[n < 1, Return[]];
-	data = If[
-		n == 1,
-		RandomVariate[NormalDistribution[], 100],
-		RandomVariate[NormalDistribution[], {n, 100}]
-	];
+	dist = NormalDistribution[];
+	data = RandomVariate[dist, If[n == 1, 100, {n, 100}], 100];
 	RandomWaifu[data, o]
 ];
-RandomWaifu[list_List, OptionsPattern[]] := Module[
+RandomWaifu[list_List, OptionsPattern[]] := Block[
 	{eval, results, info},
-	eval = Switch[OptionValue@NetModel,
-		"F1", WaifuLoadingModel["DCGAN-F1"],
-		"F2", WaifuLoadingModel["DCGAN-F1"],
-		"G1", WaifuLoadingModel["DCGAN-F1"],
-		_, Message[Import::nffil, OptionValue@NetModel, "loading"]; Return[]
+	If[
+		!MemberQ[$RandomWaifuModels, OptionValue@NetModel],
+		Message[Import::nffil, OptionValue@NetModel, "loading"];
+		Return[]
 	];
+	eval = WaifuLoadingModel[OptionValue@NetModel];
 	results = eval[list, TargetDevice -> OptionValue@TargetDevice];
 	If[!TrueQ[OptionValue@MetaInformation], Return[results]];
 	info = <|

@@ -1,17 +1,24 @@
-# Idea Project
-*.iml
-.idea/
-
-# yarn
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
 # Build Temp
-.DS_Store
-docs/.build/
-docs/.vuepress/public/
+*.dark
 
-# Notebook
+
+# idea 配置文件
+*.iml
+.idea
+
+
+# 模型文件
+*.7z
+*.rar
+*.zip
+*.wxf
+*.wmlf
+*.onnx
+*.wlnet
+
+# Python 测试
+Test/Python/*
+!Test/Python/*.py
+
+# Mathematica 测试
 *.nb

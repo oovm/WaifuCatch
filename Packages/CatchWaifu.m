@@ -4,9 +4,9 @@
 (*Declare*)
 
 
-BeginPackage["CatchWaifu`"];
 WaifuLab::usage = "";
 WaifuLabGrid::usage = "";
+ThisWaifuDoesNotExist::usage = "";
 Begin["`Private`"];
 
 
@@ -67,6 +67,35 @@ WaifuLabGrid[i1_, i2_, i3_] := Module[
 
 
 (* ::Section:: *)
+(*ThisWaifuDoesnotExist*)
+
+
+(* ::Item:: *)
+(*Model: StyleGAN*)
+
+
+(* ::Item:: *)
+(*ThisWaifuDoesNotExist: https://www.thiswaifudoesnotexist.net*)
+
+
+$ThisWaifuDoesNotExistTextRange = {0, 125254};
+$ThisWaifuDoesNotExistImageRange = {0, 200000 - 1};
+
+
+ThisWaifuDoesNotExist[a_Integer : -1, OptionsPattern[]] := Block[
+	{apiImage, n},
+	(*apiText=StringTemplate["https://www.thiswaifudoesnotexist.net/snippet-`1`.txt"];*)
+	apiImage = StringTemplate["https://www.thiswaifudoesnotexist.net/example-`1`.jpg"];
+	n = If[
+		0 < a < Last@$ThisWaifuDoesNotExistImageRange,
+		a,
+		RandomInteger@$ThisWaifuDoesNotExistImageRange
+	];
+	Import@apiImage[n]
+];
+
+
+(* ::Section:: *)
 (*Additional*)
 
 
@@ -75,4 +104,3 @@ SetAttributes[
 	{ },
 	{Protected, ReadProtected}
 ];
-EndPackage[]
